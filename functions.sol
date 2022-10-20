@@ -14,11 +14,11 @@ contract Number {
 
     //Private function
     function getNumberPrivate() private returns (int number) {
-        number = 1948;
+        number = 2000;
     }
 
     function changeNumberPrivate() public returns (int number) {
-        number = getNumber() * -1;
+        number = getNumberPrivate() * -1;
     }
 
     //Payable function
@@ -26,7 +26,7 @@ contract Number {
         receiver.transfer(msg.value);
     }
     //View function
-    string name = "Nicolas";
+    string name = "Diego";
     function getName() public view returns (string memory) {
         return name;
     }
