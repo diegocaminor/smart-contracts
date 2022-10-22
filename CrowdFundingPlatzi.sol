@@ -19,28 +19,22 @@ contract CrowdfundingPlatzi {
         author = payable(msg.sender);
     }
 
-    modifier notOwner() {
-        require(
-            msg.sender != author,
-            "The owner can not fund to this crowdfunding!"
-        );
+    modifier isNotAuthor() {
+        require(msg.sender != author, "As author you can not fund your own project");
         _;
     }
 
-    modifier onlyOwner() {
-        require(
-            msg.sender == author,
-            "Only owner can modify the project status"
-        );
+    modifier isAuthor() {
+        require(msg.sender == author, "You need to be the project owner");
         _;
     }
 
-    function foundProject() public payable notOwner {
+    function foundProject() public payable isNotAuthor {
         author.transfer(msg.value);
         funds += msg.value;
     }
 
-    function changeProjectState(string calldata newState) public onlyOwner {
+    function changeProjectState(string calldata newState) public isAuthor {
         state = newState;
     }
 }
