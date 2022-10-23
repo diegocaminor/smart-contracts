@@ -19,6 +19,15 @@ contract CrowdfundingPlatzi {
         author = payable(msg.sender);
     }
 
+    event FundsReceived(
+        address donnor,
+        uint funds
+    );
+
+    event ProjectStateChanged (
+        string newState
+    );
+
     modifier isNotAuthor() {
         require(msg.sender != author, "As author you can not fund your own project");
         _;
@@ -32,9 +41,11 @@ contract CrowdfundingPlatzi {
     function foundProject() public payable isNotAuthor {
         author.transfer(msg.value);
         funds += msg.value;
+        emit FundsReceived(msg.sender, funds);
     }
 
     function changeProjectState(string calldata newState) public isAuthor {
         state = newState;
+        emit ProjectStateChanged(state);
     }
 }
