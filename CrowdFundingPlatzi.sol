@@ -7,7 +7,7 @@ contract CrowdfundingPlatzi {
     string public name;
     string public description;
     address payable public author;
-    string public state = "Opened";
+    uint public state = 1;
     uint public funds;
     uint public fundraisingGoal;
 
@@ -26,7 +26,7 @@ contract CrowdfundingPlatzi {
 
     event ProjectStateChanged (
         string projectId,
-        string state
+        uint state
     );
 
     modifier isNotAuthor() {
@@ -39,13 +39,18 @@ contract CrowdfundingPlatzi {
         _;
     }
 
+    error stateNotDefined(uint state);
+
     function foundProject() public payable isNotAuthor {
+        require(msg.value > 0, "Fund value must be greater than 0");
+        require(state == 1, "The crowdfunding is closed, you can not contribute anymore to the project");
         author.transfer(msg.value);
         funds += msg.value;
         emit ProjectFunded(id, msg.value);
     }
 
-    function changeProjectState(string calldata newState) public isAuthor {
+    function changeProjectState(uint newState) public isAuthor {
+        require(state != newState, "New state must be different");
         state = newState;
         emit ProjectStateChanged(id, newState);
     }
