@@ -19,13 +19,14 @@ contract CrowdfundingPlatzi {
         author = payable(msg.sender);
     }
 
-    event FundsReceived(
-        address donnor,
-        uint funds
+    event ProjectFunded(
+        string projectId,
+        uint value
     );
 
     event ProjectStateChanged (
-        string newState
+        string projectId,
+        string state
     );
 
     modifier isNotAuthor() {
@@ -41,11 +42,11 @@ contract CrowdfundingPlatzi {
     function foundProject() public payable isNotAuthor {
         author.transfer(msg.value);
         funds += msg.value;
-        emit FundsReceived(msg.sender, funds);
+        emit ProjectFunded(id, msg.value);
     }
 
     function changeProjectState(string calldata newState) public isAuthor {
         state = newState;
-        emit ProjectStateChanged(state);
+        emit ProjectStateChanged(id, newState);
     }
 }
